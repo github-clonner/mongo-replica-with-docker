@@ -1,8 +1,10 @@
+#!/usr/bin/env bash
+
+source ./box.sh
+
 function switchToServer {
   env='docker-machine env '$1
-  echo '···························'
-  echo '·· swtiching >>>> '$1' server ··'
-  echo '···························'
+  box "·· Swtiching >>>> '$1' server ··" "light_purple" "blue"
   eval $($env)
 }
 

@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+source ./box.sh
+
 function howManyServers {
   arg=''
   c=0
@@ -12,9 +16,7 @@ function howManyServers {
 
 function switchToServer {
   env='docker-machine env '$1
-  echo '···························'
-  echo '·· swtiching >>>> '$1' server ··'
-  echo '···························'
+  box "·· Swtiching >>>> $1 server ··" "light_purple" "blue"
   eval $($env)
 }
 
@@ -36,9 +38,8 @@ function createDockerVolume {
 }
 
 function copyFilesToContainer {
-  echo '·· copying files to container >>>> '$1' ··'
-
-  # copy necessary files
+  box "·· Copying files to container >>>> $1 ··" "light_yellow" "red"
+  # copy necessary files 
   docker cp ./admin.js $1:/data/admin/
   docker cp ./replica.js $1:/data/admin/
   docker cp ./mongo-keyfile $1:/data/keyfile/
@@ -48,7 +49,7 @@ function copyFilesToContainer {
 
 # @params container volume
 function configMongoContainer {
-  echo '·· configuring container >>>> '$1' ··'
+  box "·· Configuring container >>>> $1 ··" "light_yellow" "red"
 
   # check if volume exists
   createDockerVolume $2
@@ -68,7 +69,7 @@ function configMongoContainer {
 
 # @params container volume
 function removeAndCreateContainer {
-  echo '·· removing container >>>> '$1' ··'
+  box "·· Removing container >>>> $1 ··" "light_yellow" "red"
 
   # remove container
   docker rm -f $1
@@ -80,7 +81,7 @@ function removeAndCreateContainer {
   p='27017'
   rs='rs1'
 
-  echo '·· recreating container >>>> '$1' ··'
+  box "·· Recreating container >>>>  $1 ··" "light_yellow" "red"
 
   #create container with sercurity and replica configuration
   docker run --restart=unless-stopped --name $1 --hostname $1 \
@@ -100,7 +101,7 @@ function createMongoDBNode {
   # switch to corresponding server
   switchToServer $1
 
-  echo '·· creating container >>>> '$2' ··'
+  box "·· Creating container >>>> $2 ··" "light_purple" "blue"
 
   # start configuration of the container
   configMongoContainer $2 $3
@@ -113,9 +114,7 @@ function createMongoDBNode {
   # verify if container is ready
   wait_for_databases 'manager1'
 
-  echo '·······························'
-  echo '·  CONTAINER '$1' CREATED ··'
-  echo '·······························'
+  box "..  CONTAINER $1 CREATED .." "light_purple" "blue"
 }
 
 function wait_for {
@@ -185,9 +184,7 @@ function init_mongo_primary {
   createMongoDBNode manager1 mongoNode1 mongo_storage
   # @params container
   init_replica_set mongoNode1
-  echo '·······························'
-  echo '·  REPLICA SET READY TO ADD NODES ··'
-  echo '·······························'
+  box ".. REPLICA SET READY TO ADD NODES .." "light_purple" "blue"
 }
 
 function init_mongo_secondaries {

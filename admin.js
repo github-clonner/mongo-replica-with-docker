@@ -1,13 +1,13 @@
 admin = db.getSiblingDB("admin")
 admin.createUser(
   {
-    user: "cristian",
-    pwd: "cristianPassword2017",
+    user: "eldorplus",
+    pwd: "eldorplusPassword2017",
     roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
   }
 )
 
-db.getSiblingDB("admin").auth("cristian", "cristianPassword2017" )
+db.getSiblingDB("admin").auth("eldorplus", "eldorplusPassword2017" )
 
 db.getSiblingDB("admin").createUser(
   {
